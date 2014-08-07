@@ -2,8 +2,9 @@ class List
 
   attr_reader :name, :id
 
-  def initialize(name)
-    @name = name
+  def initialize(hash)
+    @name = hash['name']
+    @id = hash['id']
   end
 
   def ==(another_name)
@@ -15,7 +16,8 @@ class List
     lists = []
     results.each do |result|
       name = result['name']
-      lists << List.new(name)
+      id = result['id'].to_i
+      lists << List.new({'name' => name, 'id' => id})
     end
   lists
   end
@@ -23,5 +25,10 @@ class List
   def save
     results = DB.exec("INSERT INTO lists (name) VALUES ('#{@name}') RETURNING id;")
     @id = results.first['id'].to_i
+  end
+
+  def remove
+    DB.exec("DELETE FROM lists WHERE id = #{@id}")
+    DB.exec("DELETE FROM tasks WHERE list_id = #{@id}")
   end
 end
