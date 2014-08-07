@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe List do
   it 'is initialized with a name' do
-    list = List.new('Epicodus stuff')
+    list = List.new({'name' => 'Epicodus stuff'})
     list.should be_an_instance_of List
   end
 
@@ -21,10 +21,12 @@ describe List do
     List.all.should eq []
   end
 
-  it 'lets you save lists to the database' do
+  it 'lets you save multiple lists to the database' do
     list = List.new({'name' => 'Epicodus stuff'})
     list.save
-    List.all.should eq [list]
+    list_two = List.new({'name' => 'Yeah'})
+    list_two.save
+    List.all.should eq [list, list_two]
   end
 
   it 'lets you remove a lists from the database' do
@@ -40,5 +42,15 @@ describe List do
     list = List.new({'name' => 'So much stuff'})
     list.save
     list.id.should be_an_instance_of Fixnum
+  end
+
+  it 'allows you to view all tasks from a specific list' do
+    list = List.new({'name' => 'Stuff'})
+    list.save
+    task1 = Task.new({'name' => 'computer', 'list_id' => 1})
+    task1.save
+    task2 = Task.new({'name' => 'backpack', 'list_id' => 2})
+    task2.save
+    list.return_tasks.should eq [task1]
   end
 end

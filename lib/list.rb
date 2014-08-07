@@ -31,4 +31,15 @@ class List
     DB.exec("DELETE FROM lists WHERE id = #{@id}")
     DB.exec("DELETE FROM tasks WHERE list_id = #{@id}")
   end
+
+  def return_tasks
+    result = DB.exec("SELECT * FROM tasks WHERE list_id = #{@id}")
+    tasks = []
+    result.each do |task|
+      name = result['name']
+      tasks << Task.new({'name' => name})
+    end
+    tasks
+  end
+
 end
