@@ -35,9 +35,9 @@ class List
   def return_tasks
     result = DB.exec("SELECT * FROM tasks WHERE list_id = #{@id}")
     tasks = []
-    result.each do |task|
+    result.each do |result|
       name = result['name']
-      tasks << Task.new({'name' => name})
+      tasks << name
     end
     tasks
   end
